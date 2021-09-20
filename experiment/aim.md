@@ -12,6 +12,3 @@ For example, the sentence 'He reckons the current account deficit will narrow to
 
 Each chunk has an open boundary and close boundary that delimit the word groups as a minimal non-recursive unit.
 
-#### Objective
-
-The objective of the experiment is to know the importance of selecting proper features for training a model and size of training corpus in learning how to do cunking.
