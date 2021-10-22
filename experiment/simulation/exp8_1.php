@@ -1,29 +1,28 @@
 <html>
 <head>
+<script class='gtm'>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-W59SWTR');</script>
+
 <script type="text/javascript" src='jquery.js'></script>
 <script type="text/javascript">
 function change(temp){
-	document.getElementById("accuracy").innerHTML="";
-	var feature=document.getElementById('feature').value;
-	if(feature=="null")
+	document.getElementById("features").innerHTML="";
+	var algo=document.getElementById('algo').value;
+	if(algo=="null")
 	{
-		alert("Select Feature for Training");
-		return;
+		// alert("Select Algorithm for Training");
+		// return;
 	}
 	var temp1=temp.split("_");
-	document.getElementById("training-feature").innerHTML="<input type='text' value='"+feature+"' readonly>";
-	feature=feature.replace(/ /g,"_");
-	$('#accuracy').load('exp8_3.php?language='+temp1[0]+'&token='+temp1[1]+'&algo='+temp1[2]+'&feature='+feature);
+	document.getElementById("training-algorithm").innerHTML="<input type='text' value='"+algo+"' readonly>";
+	$('#features').load('exp8_2.php?language='+temp1[0]+'&token='+temp1[1]+'&algo='+algo);
 }
 
 </script>
 </head>
 <body>
 <?php
-
 $language=$_GET['language'];
 $token_final=$_GET['token'];
-$algo_final=$_GET['algo'];
 
 $fp;
 if($language=='hin')
@@ -66,19 +65,21 @@ while(!feof($fp))
 	$count=$count+1;
 }
 
-echo "<div style=\"color:blue; font-style:italic\">Now, select feature for training<br/>
-<div id=\"training-feature\">
-<select name='feature' id='feature' onchange=change('".$language."_".$token_final."_".$algo_final."')>
-<option value='null'>---Select Feature for Training---</option>";
+echo "<div style=\"color:blue; font-style:italic\">Select the algorithm for training<br/>
+<div id=\"training-algorithm\">
+<select name='algo' id='algo' onchange=change('".$language."_".$token_final."')>
+<option value='null'>---Select Algorithm for Training---</option>";
 $count=0;
-foreach ($feature as $a)
+foreach ($algo as $a)
 {
 	$count=$count+1;
 	echo "<option value='".$a."'";
 	echo " >".$a." </option>";
 }
 echo "</select></div></div>";
-echo "<br/><br/><div id='accuracy'></div>";
+echo "<br/><br/><div id='features'></div>";
+
+
 ?>
 </body>
 </html>
