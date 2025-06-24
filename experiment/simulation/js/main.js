@@ -28,10 +28,10 @@ function fetchDataFile(language) {
 
 // Helper: Explanations and tooltips
 const EXPLANATIONS = {
-    language: 'Select the language for which you want to build the chunker. Language affects the data and model performance.',
-    train: 'Choose the size of the training corpus. Larger corpora usually lead to better model accuracy.',
-    algo: 'Select the algorithm for training the chunker. CRF (Conditional Random Fields) and HMM (Hidden Markov Model) are common sequence models.',
-    feature: 'Select which features to use for training. Features influence what information the model uses to make predictions.'
+    language: 'Language affects the data and model performance.',
+    train: 'Larger corpora usually lead to better model accuracy.',
+    algo: 'CRF (Conditional Random Fields) and HMM (Hidden Markov Model) are common sequence models.',
+    feature: 'Features influence what information the model uses to make predictions.'
 };
 
 const TOOLTIP = {
@@ -120,138 +120,172 @@ const EXAMPLES = {
     }
 };
 
-// Populate the language dropdown and handle selection
-function setupLanguageSelection() {
-    const langSelect = document.querySelector('select[name="lang"]');
-    if (!langSelect) return;
-    // Add explanation above language dropdown
-    langSelect.parentElement.insertAdjacentHTML('beforebegin', `<div class="explanation">${EXPLANATIONS.language}</div>`);
-    // Add tooltips to language options
-    Array.from(langSelect.options).forEach(opt => {
-        if (TOOLTIP.lang[opt.value]) opt.title = TOOLTIP.lang[opt.value];
-    });
-    langSelect.addEventListener('change', function() {
-        const lang = this.value;
-        document.getElementById('step-train-size').innerHTML = '';
-        document.getElementById('step-train-size').classList.add('step-hidden');
-        document.getElementById('step-algo').innerHTML = '';
-        document.getElementById('step-algo').classList.add('step-hidden');
-        document.getElementById('step-feature').innerHTML = '';
-        document.getElementById('step-feature').classList.add('step-hidden');
-        document.getElementById('step-accuracy').innerHTML = '';
-        document.getElementById('step-accuracy').classList.add('step-hidden');
-        if (lang === 'null') return;
-        renderTrainSizeDropdown(lang);
-    });
+let fullData = [];
+
+// Helper to create a dropdown control with a tooltip
+function createDropdownControl(id, label, explanation) {
+    return `
+        <div class="sim-control-group">
+            <select name="${id}" id="${id}" title="${label}">
+                <option value="null">${label}</option>
+            </select>
+            <div class="info-tooltip">
+                <i class="fas fa-info-circle"></i>
+                <span class="tooltip-text">${explanation}</span>
+            </div>
+        </div>
+    `;
 }
 
-// Render the training size dropdown based on selected language
-function renderTrainSizeDropdown(language) {
-    fetchDataFile(language).then(data => {
+// Render initial dropdowns
+function setupInitialState() {
+    const stepsContainer = document.getElementById('simulation-steps-col');
+    
+    // 1. Language
+    let langHtml = createDropdownControl('lang-select', '---Select Language---', EXPLANATIONS.language);
+
+    // 2. Train Size
+    let trainHtml = createDropdownControl('train-select', '---Select Training Corpus Size---', EXPLANATIONS.train);
+
+    // 3. Algorithm
+    let algoHtml = createDropdownControl('algo-select', '---Select Algorithm---', EXPLANATIONS.algo);
+
+    // 4. Feature
+    let featureHtml = createDropdownControl('feature-select', '---Select Feature---', EXPLANATIONS.feature);
+
+    stepsContainer.innerHTML = langHtml + trainHtml + algoHtml + featureHtml;
+
+    // Manually add static options for the language selector
+    const langSelect = document.getElementById('lang-select');
+    langSelect.add(new Option('English', 'eng'));
+    langSelect.add(new Option('Hindi', 'hin'));
+    
+    // Disable dependent dropdowns initially
+    document.getElementById('train-select').disabled = true;
+    document.getElementById('algo-select').disabled = true;
+    document.getElementById('feature-select').disabled = true;
+
+    // Add event listeners
+    document.getElementById('lang-select').addEventListener('change', handleLanguageChange);
+    document.getElementById('train-select').addEventListener('change', handleTrainSizeChange);
+    document.getElementById('algo-select').addEventListener('change', handleAlgoChange);
+    document.getElementById('feature-select').addEventListener('change', handleFeatureChange);
+}
+
+// Handlers for dropdown changes
+function handleLanguageChange() {
+    const lang = this.value;
+    const trainSelect = document.getElementById('train-select');
+    const algoSelect = document.getElementById('algo-select');
+    const featureSelect = document.getElementById('feature-select');
+
+    // Reset and disable dependent dropdowns
+    trainSelect.innerHTML = '<option value="null">---Select Training Corpus Size---</option>';
+    trainSelect.disabled = true;
+    algoSelect.innerHTML = '<option value="null">---Select Algorithm---</option>';
+    algoSelect.disabled = true;
+    featureSelect.innerHTML = '<option value="null">---Select Feature---</option>';
+    featureSelect.disabled = true;
+    clearAccuracy();
+
+    if (lang === 'null') return;
+
+    fetchDataFile(lang).then(data => {
+        fullData = data;
         const uniqueTrainTokens = [...new Set(data.map(row => row.train_token))];
-        const trainTypeMap = {};
-        data.forEach(row => {
-            if (!trainTypeMap[row.train_token]) {
-                trainTypeMap[row.train_token] = row.train_type;
-            }
-        });
-        let html = `<h3 class='step-heading'>2. Select Training Corpus Size</h3>`;
-        html += `<div class='explanation'>Choose the size of the training corpus.<br>Larger corpora usually lead to better model accuracy.</div>`;
-        html += `<select name='train' id='train'>
-        <option value='null'>---Select Size of Training corpus---</option>`;
         uniqueTrainTokens.forEach(token => {
             const tip = TOOLTIP.train[token] || '';
-            html += `<option value='${token} ${trainTypeMap[token]}' title='${tip}'>${token}</option>`;
+            trainSelect.add(new Option(token, token, false, false));
+            trainSelect.options[trainSelect.options.length - 1].title = tip;
         });
-        html += `</select>`;
-        document.getElementById('step-train-size').innerHTML = html;
-        document.getElementById('step-train-size').classList.remove('step-hidden');
-        document.getElementById('train').addEventListener('change', function() {
-            const train = this.value;
-            if (train === 'null') return;
-            renderAlgorithmDropdown(language, train, data);
-        });
-        // Clear next steps and hide them
-        document.getElementById('step-algo').innerHTML = '';
-        document.getElementById('step-algo').classList.add('step-hidden');
-        document.getElementById('step-feature').innerHTML = '';
-        document.getElementById('step-feature').classList.add('step-hidden');
-        document.getElementById('step-accuracy').innerHTML = '';
-        document.getElementById('step-accuracy').classList.add('step-hidden');
+        trainSelect.disabled = false;
     });
 }
 
-// Render the algorithm dropdown after training size is selected
-function renderAlgorithmDropdown(language, train, data) {
-    const trainToken = train.split(' ')[0];
-    const algos = [...new Set(data.filter(row => row.train_token === trainToken).map(row => row.algo))];
-    let html = `<h3 class='step-heading'>3. Select Algorithm</h3>`;
-    html += `<div class='explanation'>Select the algorithm for training the chunker.<br>CRF (Conditional Random Fields) and HMM (Hidden Markov Model) are common sequence models.</div>`;
-    html += `<select name='algo' id='algo'>
-    <option value='null'>---Select Algorithm for Training---</option>`;
+function handleTrainSizeChange() {
+    const trainToken = this.value;
+    const algoSelect = document.getElementById('algo-select');
+    const featureSelect = document.getElementById('feature-select');
+
+    algoSelect.innerHTML = '<option value="null">---Select Algorithm---</option>';
+    algoSelect.disabled = true;
+    featureSelect.innerHTML = '<option value="null">---Select Feature---</option>';
+    featureSelect.disabled = true;
+    clearAccuracy();
+
+    if (trainToken === 'null') return;
+
+    const algos = [...new Set(fullData.filter(row => row.train_token === trainToken).map(row => row.algo))];
     algos.forEach(algo => {
         const tip = TOOLTIP.algo[algo] || '';
-        html += `<option value='${algo}' title='${tip}'>${algo}</option>`;
+        algoSelect.add(new Option(algo, algo, false, false));
+        algoSelect.options[algoSelect.options.length - 1].title = tip;
     });
-    html += `</select>`;
-    document.getElementById('step-algo').innerHTML = html;
-    document.getElementById('step-algo').classList.remove('step-hidden');
-    document.getElementById('algo').addEventListener('change', function() {
-        const algo = this.value;
-        if (algo === 'null') return;
-        renderFeaturesDropdown(language, train, algo, data);
-    });
-    // Clear next steps and hide them
-    document.getElementById('step-feature').innerHTML = '';
-    document.getElementById('step-feature').classList.add('step-hidden');
-    document.getElementById('step-accuracy').innerHTML = '';
-    document.getElementById('step-accuracy').classList.add('step-hidden');
+    algoSelect.disabled = false;
 }
 
-// Render the feature dropdown after algorithm is selected
-function renderFeaturesDropdown(language, train, algo, data) {
-    const trainToken = train.split(' ')[0];
-    const features = [...new Set(data.filter(row => row.train_token === trainToken && row.algo === algo && row.feature !== 'none').map(row => row.feature))];
-    let html = `<h3 class='step-heading'>4. Select Feature for Training</h3>`;
-    html += `<div class='explanation'>Select which features to use for training.<br>Features influence what information the model uses to make predictions.</div>`;
-    html += `<select name='feature' id='feature'>
-    <option value='null'>---Select Feature for Training---</option>`;
+function handleAlgoChange() {
+    const algo = this.value;
+    const trainToken = document.getElementById('train-select').value;
+    const featureSelect = document.getElementById('feature-select');
+    
+    featureSelect.innerHTML = '<option value="null">---Select Feature---</option>';
+    featureSelect.disabled = true;
+    clearAccuracy();
+
+    if (algo === 'null') return;
+
+    const features = [...new Set(fullData.filter(row => row.train_token === trainToken && row.algo === algo && row.feature !== 'none').map(row => row.feature))];
     features.forEach(feature => {
         const tip = TOOLTIP.feature[feature] || '';
-        html += `<option value='${feature}' title='${tip}'>${feature}</option>`;
+        featureSelect.add(new Option(feature, feature, false, false));
+        featureSelect.options[featureSelect.options.length - 1].title = tip;
     });
-    html += `</select>`;
-    document.getElementById('step-feature').innerHTML = html;
-    document.getElementById('step-feature').classList.remove('step-hidden');
-    document.getElementById('feature').addEventListener('change', function() {
-        const feature = this.value;
-        if (feature === 'null') return;
-        renderAccuracy(language, train, algo, feature, data);
-    });
-    // Clear next step and hide it
+    featureSelect.disabled = false;
+}
+
+function handleFeatureChange() {
+    const feature = this.value;
+    clearAccuracy();
+    if (feature === 'null') return;
+
+    const lang = document.getElementById('lang-select').value;
+    const trainToken = document.getElementById('train-select').value;
+    const algo = document.getElementById('algo-select').value;
+
+    renderAccuracy(lang, trainToken, algo, feature, fullData);
+}
+
+function clearAccuracy() {
     document.getElementById('step-accuracy').innerHTML = '';
     document.getElementById('step-accuracy').classList.add('step-hidden');
+    document.getElementById('reset-simulation').style.display = 'none';
 }
 
 // Render the accuracy check button and display accuracy on click
-function renderAccuracy(language, train, algo, feature, data) {
-    const trainToken = train.split(' ')[0];
-    const row = data.find(row =>
-        row.train_token === trainToken &&
-        row.algo === algo &&
-        row.feature === feature
+function renderAccuracy(language, trainToken, algo, feature, data) {
+    const row = data.find(r =>
+        r.train_token === trainToken &&
+        r.algo === algo &&
+        r.feature === feature
     );
-    let html = `<h3 class='step-heading'>5. Check Accuracy</h3>`;
-    html += `<div class='explanation'>Training is completed.</div>`;
+    let html = `<div class='explanation'>Training is completed.</div>`;
     html += `<button id='check-accuracy'>Check Accuracy</button>`;
     html += `<div id='accuracy_ans'></div>`;
     html += `<div id='example-sentences'></div>`;
     document.getElementById('step-accuracy').innerHTML = html;
     document.getElementById('step-accuracy').classList.remove('step-hidden');
     document.getElementById('check-accuracy').addEventListener('click', function() {
-        document.getElementById('accuracy_ans').innerHTML = `<b>Accuracy is: </b>${row ? row.accuracy : 'N/A'}`;
+        // Find the accuracy again
+        const accuracyRow = data.find(r =>
+            r.train_token === trainToken &&
+            r.algo === algo &&
+            r.feature === feature
+        );
+        document.getElementById('accuracy_ans').innerHTML = `<b>Accuracy is: </b>${accuracyRow ? accuracyRow.accuracy : 'N/A'}`;
         // Hide the button after click
         this.style.display = 'none';
+        
         // Show example sentences
         const ex = (EXAMPLES[language] && EXAMPLES[language][algo] && EXAMPLES[language][algo][feature]) || [];
         let exHtml = `<div class='example-heading'>Example Sentences with Predicted Chunks:</div>`;
@@ -267,94 +301,23 @@ function renderAccuracy(language, train, algo, feature, data) {
         document.getElementById('example-sentences').innerHTML = exHtml;
         // Show reset button
         const resetBtn = document.getElementById('reset-simulation');
-        if (resetBtn) resetBtn.style.display = '';
+        if (resetBtn) resetBtn.style.display = 'block';
     });
 }
 
 // Reset simulation to initial state
 function resetSimulation() {
-    // Clear all dynamic content
-    document.getElementById('step-train-size').innerHTML = '';
-    document.getElementById('step-train-size').classList.add('step-hidden');
-    const algoDiv = document.getElementById('step-algo');
-    if (algoDiv) algoDiv.innerHTML = '';
-    const featuresDiv = document.getElementById('step-feature');
-    if (featuresDiv) featuresDiv.innerHTML = '';
-    const accuracyDiv = document.getElementById('step-accuracy');
-    if (accuracyDiv) accuracyDiv.innerHTML = '';
-    // Reset language dropdown
-    const langSelect = document.querySelector('select[name="lang"]');
-    if (langSelect) langSelect.value = 'null';
-    // Hide reset button
-    const resetBtn = document.getElementById('reset-simulation');
-    if (resetBtn) resetBtn.style.display = 'none';
+    setupInitialState(); // Re-initialize the dropdowns
+    clearAccuracy();
 }
 
 // Initial setup
 window.addEventListener('DOMContentLoaded', function() {
-    // Render language step with heading and explanation
-    document.getElementById('step-language').innerHTML = `
-        <h3 class='step-heading'>1. Select Language</h3>
-        <div class='explanation'>Select the language for which you want to build the chunker. Language affects the data and model performance.</div>
-        <select autocomplete='off' name='lang' id='lang-select'>
-            <option value='null'>---Select Language---</option>
-            <option value='eng'>English</option>
-            <option value='hin'>Hindi</option>
-        </select>
-    `;
-    // Language selection event
-    document.getElementById('lang-select').addEventListener('change', function() {
-        const lang = this.value;
-        if (lang === 'null') {
-            document.getElementById('step-train-size').innerHTML = '';
-            document.getElementById('step-train-size').classList.add('step-hidden');
-            document.getElementById('step-algo').innerHTML = '';
-            document.getElementById('step-algo').classList.add('step-hidden');
-            document.getElementById('step-feature').innerHTML = '';
-            document.getElementById('step-feature').classList.add('step-hidden');
-            document.getElementById('step-accuracy').innerHTML = '';
-            document.getElementById('step-accuracy').classList.add('step-hidden');
-            return;
-        }
-        renderTrainSizeDropdown(lang);
-    });
+    setupInitialState();
+    
     // Reset button
     const resetBtn = document.getElementById('reset-simulation');
     if (resetBtn) {
-        resetBtn.addEventListener('click', function() {
-            document.getElementById('step-language').innerHTML = `
-                <h3 class='step-heading'>1. Select Language</h3>
-                <div class='explanation'>Select the language for which you want to build the chunker. Language affects the data and model performance.</div>
-                <select autocomplete='off' name='lang' id='lang-select'>
-                    <option value='null'>---Select Language---</option>
-                    <option value='eng'>English</option>
-                    <option value='hin'>Hindi</option>
-                </select>
-            `;
-            document.getElementById('lang-select').addEventListener('change', function() {
-                const lang = this.value;
-                if (lang === 'null') {
-                    document.getElementById('step-train-size').innerHTML = '';
-                    document.getElementById('step-train-size').classList.add('step-hidden');
-                    document.getElementById('step-algo').innerHTML = '';
-                    document.getElementById('step-algo').classList.add('step-hidden');
-                    document.getElementById('step-feature').innerHTML = '';
-                    document.getElementById('step-feature').classList.add('step-hidden');
-                    document.getElementById('step-accuracy').innerHTML = '';
-                    document.getElementById('step-accuracy').classList.add('step-hidden');
-                    return;
-                }
-                renderTrainSizeDropdown(lang);
-            });
-            document.getElementById('step-train-size').innerHTML = '';
-            document.getElementById('step-train-size').classList.add('step-hidden');
-            document.getElementById('step-algo').innerHTML = '';
-            document.getElementById('step-algo').classList.add('step-hidden');
-            document.getElementById('step-feature').innerHTML = '';
-            document.getElementById('step-feature').classList.add('step-hidden');
-            document.getElementById('step-accuracy').innerHTML = '';
-            document.getElementById('step-accuracy').classList.add('step-hidden');
-            resetBtn.style.display = 'none';
-        });
+        resetBtn.addEventListener('click', resetSimulation);
     }
 });
