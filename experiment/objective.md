@@ -1,1 +1,2 @@
-- The objective of the experiment is to know the importance of selecting proper features for training a model and size of training corpus in learning how to do cunking.
+- To explore and understand how the selection of features and the size of the training corpus influence the performance and accuracy of chunking in Natural Language Processing.
+- To provide hands-on experience in building a chunker using different algorithms and feature sets, and to visualize the effect of these choices through interactive simulation.

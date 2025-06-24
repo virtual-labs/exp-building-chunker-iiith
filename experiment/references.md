@@ -1,1 +1,7 @@
-[Language Technologies Research Center, IIIT-H](http://iiit.academia.edu/Departments/Language_Technologies_Research_Centre_LTRC_)
+1. Abney, S. (1991). Parsing by chunks. In: Principle-Based Parsing, Dordrecht: Kluwer Academic Publishers, pp. 257-278. [PDF](https://www.aclweb.org/anthology/J93-2001.pdf)
+2. Sha, F., & Pereira, F. (2003). Shallow parsing with conditional random fields. Proceedings of HLT-NAACL 2003, pp. 134-141. [PDF](https://www.aclweb.org/anthology/N03-1022.pdf)
+3. Rabiner, L. R. (1989). A tutorial on Hidden Markov Models and selected applications in speech recognition. Proceedings of the IEEE, 77(2), 257-286. [PDF](https://ieeexplore.ieee.org/document/18626)
+4. Jurafsky, D., & Martin, J. H. (2023). Speech and Language Processing (3rd ed. draft). [Book Online](https://web.stanford.edu/~jurafsky/slp3/)
+5. [NLTK Book: Chapter 7 - Extracting Information from Text](https://www.nltk.org/book/ch07.html)
+6. [Wikipedia: Chunking (computational linguistics)](https://en.wikipedia.org/wiki/Chunking_(computational_linguistics))
+7. [Language Technologies Research Center, IIIT-H](http://iiit.academia.edu/Departments/Language_Technologies_Research_Centre_LTRC_)
