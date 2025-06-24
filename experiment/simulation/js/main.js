@@ -173,7 +173,7 @@ function renderTrainSizeDropdown(language) {
         });
         // Clear next steps and hide them
         document.getElementById('step-algo').innerHTML = '';
-        document.getElementById('step-algo').classList.remove('step-hidden');
+        document.getElementById('step-algo').classList.add('step-hidden');
         document.getElementById('step-feature').innerHTML = '';
         document.getElementById('step-feature').classList.add('step-hidden');
         document.getElementById('step-accuracy').innerHTML = '';
