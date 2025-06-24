@@ -1,11 +1,14 @@
-**STEP1**: Select the language.
+**STEP 1:** Select the language from the dropdown menu.
 
-**OUTPUT**: Drop down to select size of corpus, algorithm and features will appear.
+**STEP 2:** Select the size of the training corpus. (This option appears after selecting the language.)
 
-**STEP2**: Select corpus size.
+**STEP 3:** Select the algorithm for training the chunker (CRF or HMM). (This option appears after selecting the corpus size.)
 
-**STEP3**: Select algorithm "CRF" or "HMM".
+**STEP 4:** Select the feature set for training (only lexicon, only POS, or lexicon and POS). (This option appears after selecting the algorithm.)
 
-**STEP4**: Select feature "only lexicon", "only POS", "lexicon and POS".
+**STEP 5:** Click the "Check Accuracy" button to view the resulting accuracy for your chosen configuration. Example sentences with predicted chunks will also be displayed.
 
-**OUTPUT**: Corresponding accuracy wil be shown.
+**OUTPUT:**
+- The accuracy of the chunker for the selected configuration is shown.
+- Example sentences with their predicted chunks are displayed for better understanding.
+- You can use the "Reset / Try Another Configuration" button to start over and explore different settings.
