@@ -29,7 +29,7 @@ body {
   background: var(--color-neutral-50);
   color: var(--color-neutral-800);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 1.18rem;
+  font-size: 1rem;
   margin: 0;
   padding: 0;
   min-height: 100vh;
@@ -39,54 +39,37 @@ body {
 .simulation-flex-container {
   display: flex;
   flex-direction: column;
-  gap: 2.5em;
+  gap: 0;
   max-width: 1200px;
   margin: 0 auto;
-  justify-content: center;
-  align-items: center;
 }
-.simulation-steps-col {
-  width: 50%;
-  min-width: 320px;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7em;
-  background: #fff;
-  border: 1px solid var(--color-neutral-200);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: 1.5em 2em 1.2em 2em;
-  margin-top: 2em;
+.simulation-left {
+  width: 100%;
+  margin-bottom: 2em;
 }
-.simulation-accuracy-col {
-  width: 50%;
-  min-width: 340px;
-  max-width: 700px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.simulation-right {
+  width: 100%;
 }
+
 @media (min-width: 900px) {
   .simulation-flex-container {
     flex-direction: row;
     align-items: flex-start;
     gap: 2.5em;
-    justify-content: center;
   }
-  .simulation-steps-col, .simulation-accuracy-col {
-    width: 50%;
-  }
-}
-@media (max-width: 900px) {
-  .simulation-flex-container {
-    flex-direction: column;
-    gap: 1.2em;
-    align-items: center;
-  }
-  .simulation-steps-col, .simulation-accuracy-col {
-    width: 100%;
+  .simulation-left {
+    width: 38%;
+    min-width: 320px;
     max-width: 420px;
+    position: sticky;
+    top: 2em;
+    align-self: flex-start;
+    z-index: 1;
+  }
+  .simulation-right {
+    width: 62%;
+    min-width: 340px;
+    max-width: 700px;
   }
 }
 
@@ -124,8 +107,7 @@ body {
   background: #fff;
   box-shadow: var(--shadow-md);
   border-radius: var(--radius-lg);
-  /*padding: 1.5em 2em 1.2em 2em;*/
-  padding: 0.5em 1em 0.2em 1em;
+  padding: 1.5em 2em 1.2em 2em;
   margin: 0;
   max-width: 100%;
   text-align: center;
@@ -162,12 +144,9 @@ body {
   border: 1px solid var(--color-neutral-300);
   border-radius: var(--radius-md);
   font-size: 1rem;
-  color: #06170c;
+  color: var(--color-neutral-800);
   padding: 0.5em 0.8em;
   transition: border-color 0.2s;
-}
-.simulation-step select option {
-  color: #06170c;
 }
 .simulation-step select:focus,
 .simulation-step input[type="text"]:focus {
@@ -276,7 +255,7 @@ body {
   border: none;
   border-radius: var(--radius-md);
   padding: 0.6em 1.5em;
-  font-size: 1.1em;
+  font-size: 1.5em;
   margin-top: 1.5em;
   cursor: pointer;
   transition: background 0.2s;
@@ -319,88 +298,138 @@ body {
   display: none !important;
 }
 
-/* You CSS goes in here */
-
-/* Remove old .simulation-grid rules */
-.simulation-grid, .simulation-grid-container { display: none !important; }
-
-.step-control {
+.simulation-2col-grid {
   display: flex;
-  align-items: center;
-  gap: 0.5em;
+  flex-direction: row;
+  gap: 2.5em;
   width: 100%;
-  padding: 1.5em 2em;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+.sim-col1, .sim-col2 {
+  flex: 1 1 0;
+  min-width: 340px;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 2.5em;
+}
+.sim-col1 {
+  margin-right: 1.5em;
+}
+.sim-col2 {
+  margin-left: 1.5em;
+  justify-content: flex-start;
+}
+#result-panel {
   background: #fff;
-  border: 1px solid var(--color-neutral-200);
+  border: 2px solid var(--color-primary-light);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-}
-
-.sim-control-group {
+  min-height: 340px;
+  min-width: 0;
+  padding: 2em 2em 1.5em 2em;
+  margin-bottom: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5em;
-  width: 100%;
-  margin-bottom: 0.5em;
-}
-
-.sim-control-group select {
+  justify-content: flex-start;
   flex-grow: 1;
-  background: var(--color-neutral-100);
-  border: 1px solid var(--color-neutral-300);
-  border-radius: var(--radius-md);
-  font-size: 1.08em;
-  color: var(--color-neutral-900);
-  padding: 0.5em 0.8em;
 }
-
-.info-tooltip {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-}
-
-.info-tooltip .tooltip-text {
-  visibility: hidden;
-  width: 250px;
-  background-color: var(--color-neutral-800);
-  color: #fff;
+.result-heading {
+  color: var(--color-primary-dark);
+  font-size: 1.8em;
+  font-weight: 700;
+  margin-bottom: 1em;
   text-align: center;
-  border-radius: 6px;
-  padding: 10px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -125px;
-  opacity: 0;
-  transition: opacity 0.3s;
+}
+#result-content {
+  width: 100%;
+  min-height: 120px;
+  text-align: left;
+  font-size: 1.5em;
+}
+@media (max-width: 900px) {
+  .simulation-2col-grid {
+    flex-direction: column;
+    gap: 1.2em;
+  }
+  .sim-col1, .sim-col2 {
+    max-width: 95%;
+    margin: 0;
+  }
+  #result-panel {
+    min-height: 180px;
+    padding: 1.2em 1em 1em 1em;
+  }
+  .container-fluid {
+    margin-left: 4px !important;
+    margin-right: 4px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+.sim-col1, .sim-col2 {
+  margin-top: 2.5em;
+}
+.simulation-step, .simulation-step select, .simulation-step label, .simulation-step .step-heading {
+  font-size: 1.25em;
+}
+.simulation-step .explanation, .info-icon {
   font-size: 1.08em;
 }
-
-.info-tooltip .tooltip-text::after {
-  content: "";
+.info-icon {
+  display: inline-block;
+  margin-left: 0.5em;
+  color: var(--color-primary-dark);
+  background: var(--color-secondary-light);
+  border-radius: 50%;
+  width: 1.3em;
+  height: 1.3em;
+  text-align: center;
+  line-height: 1.3em;
+  font-weight: bold;
+  cursor: pointer;
+  border: 1px solid var(--color-primary-light);
+  position: relative;
+}
+.info-icon[title]:hover:after, .info-icon[title]:focus:after {
+  content: attr(title);
   position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: var(--color-neutral-800) transparent transparent transparent;
+  left: 110%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  color: #222;
+  border: 1px solid var(--color-primary-light);
+  border-radius: var(--radius-md);
+  padding: 0.5em 1em;
+  white-space: pre-line;
+  z-index: 10;
+  min-width: 220px;
+  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.08);
+  font-size: 1.08em;
 }
-
-.info-tooltip:hover .tooltip-text {
-  visibility: visible;
-  opacity: 1;
-}
-
-.info-tooltip i {
-  color: var(--color-primary);
-  font-size: 1.2em;
-}
-
-/* Update Check Accuracy button to match Reset button style */
 #check-accuracy {
+  background: linear-gradient(90deg, var(--color-primary) 60%, var(--color-secondary) 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0.6em 1.5em;
+  font-size: 1.5em;
+  margin-top: 1.5em;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: var(--shadow-md);
+}
+#check-accuracy:hover {
+  background: linear-gradient(90deg, var(--color-primary-dark) 60%, var(--color-accent) 100%);
+}
+
+.sim-button {
   background: linear-gradient(90deg, var(--color-primary) 60%, var(--color-secondary) 100%);
   color: #fff;
   border: none;
@@ -413,23 +442,34 @@ body {
   box-shadow: var(--shadow-md);
 }
 
-#check-accuracy:hover {
+.sim-button:hover {
   background: linear-gradient(90deg, var(--color-primary-dark) 60%, var(--color-accent) 100%);
 }
 
-.container-fluid {
+.dropdown-row {
   display: flex;
-  justify-content: center;
-  padding: 0 !important;
-  margin: 0 !important;
-  width: 100%;
+  align-items: center;
+  gap: 0.7em;
+  margin-bottom: 1.2em;
 }
 
-.lab-list-col-10 {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto !important;
-  padding: 0 1em;
+#step-accuracy-container, #reset-container {
+  margin-top: auto;
 }
+
+@media (max-width: 600px) {
+  .info-icon[title]:hover:after, .info-icon[title]:focus:after {
+    left: auto !important;
+    right: 110% !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    min-width: 180px;
+    max-width: 90vw;
+    white-space: normal;
+    text-align: left;
+    box-sizing: border-box;
+    z-index: 100;
+  }
+}
+
+/* You CSS goes in here */

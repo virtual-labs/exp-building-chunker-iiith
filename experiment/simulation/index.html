@@ -8,7 +8,6 @@
     <link href="css/bootstrap.min.css" rel="stylesheet"/>
     <link href="css/style.css" rel="stylesheet"/>
     <link href="css/main.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="js/modernizr-1.5.min.js" type="text/javascript"></script>
     <script src="js/jquery-1.7.1.min.js"></script>
     <script src="js/tabs.js" type="text/javascript"></script>
@@ -22,19 +21,27 @@
         <div id="content">
            
             <!-- =================================================================================================================================== -->
-            <div class="container-fluid">
+            <div class="container-fluid" style="margin-left: 35px; margin-right: 35px;">
                 
                     <div class="col-md-10 lab-list-col-10">
 
-                        <!--edit -->                        
-                        <div class="simulation-flex-container">
-                            <div class="simulation-steps-col" id="simulation-steps-col">
-                                <!-- Dropdowns will be rendered here by JavaScript -->
+                        <!--edit -->
+                        <!-- <h1 class="text-h1-lightblue">Building Chunker</h1> -->
+                        <div class="simulation-flex-container simulation-2col-grid">
+                            <div class="sim-col1">
+                                <div class="simulation-step" id="step-language"></div>
+                                <div class="simulation-step" id="step-train-size"></div>
+                                <div class="simulation-step" id="step-algo"></div>
+                                <div class="simulation-step" id="step-feature"></div>
+                                <div id="step-accuracy-container" style="text-align: center;"></div>
                             </div>
-                            <div class="simulation-accuracy-col">
-                                <div class="simulation-step step-hidden" id="step-accuracy"></div>
-                                <div id="reset-container" style="text-align:center; margin-top:2em;">
-                                    <button id="reset-simulation" style="display:none;">Reset / Try Another Configuration</button>
+                            <div class="sim-col2">
+                                <div id="result-panel">
+                                    <h3 class="result-heading">Result</h3>
+                                    <div id="result-content"></div>                                                                    
+                                </div>
+                                <div id="reset-container" style="text-align:center;">
+                                    <button id="reset-simulation" class="sim-button">Try Another Configuration</button>
                                 </div>
                             </div>
                         </div>
@@ -49,4 +56,5 @@
     </div>
     <!-- top div -->
     <script src="js/main.js"></script>
+
 </body><!-- jQuery --></html>
