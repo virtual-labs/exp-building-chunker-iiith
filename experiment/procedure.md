@@ -1,14 +1,42 @@
-**STEP 1:** Select the language from the dropdown menu.
+### Step-by-Step Procedure for Building a Chunker
 
-**STEP 2:** Select the size of the training corpus. (This option appears after selecting the language.)
+**Step 1: Select Language**
 
-**STEP 3:** Select the algorithm for training the chunker (CRF or HMM). (This option appears after selecting the corpus size.)
+- Choose the target language (English or Hindi) for chunking analysis.
 
-**STEP 4:** Select the feature set for training (only lexicon, only POS, or lexicon and POS). (This option appears after selecting the algorithm.)
+**Step 2: Choose Training Corpus Size**
 
-**STEP 5:** Click the "Check Accuracy" button to view the resulting accuracy for your chosen configuration. Example sentences with predicted chunks will also be displayed.
+- Select the size of the training data. Larger corpora may improve accuracy but take longer to train.
+
+**Step 3: Select Algorithm**
+
+- Pick the machine learning model for chunking: Hidden Markov Model (HMM) or Conditional Random Field (CRF).
+
+**Step 4: Choose Feature Set**
+
+- Decide which features to use for training:
+  - Lexicon only
+  - POS tags only
+  - Lexicon + POS tags (recommended for best results)
+
+**Step 5: Train and Evaluate**
+
+- Click "Check Accuracy" to train the chunker and view its accuracy for your chosen configuration.
+- Review example sentences with predicted chunk boundaries.
+
+**Step 6: Experiment and Compare**
+
+- Try different combinations of features, corpus sizes, and algorithms.
+- Use "Reset / Try Another Configuration" to start over and explore more settings.
+
+**Tips:**
+
+- Use larger corpora and richer feature sets for higher accuracy.
+- Compare HMM and CRF results to understand model differences.
+- Analyze error patterns in the output to improve your chunker.
 
 **OUTPUT:**
+
 - The accuracy of the chunker for the selected configuration is shown.
 - Example sentences with their predicted chunks are displayed for better understanding.
 - You can use the "Reset / Try Another Configuration" button to start over and explore different settings.
