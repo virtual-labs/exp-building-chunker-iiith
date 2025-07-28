@@ -28,6 +28,22 @@
 
                         <!--edit -->
                         <!-- <h1 class="text-h1-lightblue">Building Chunker</h1> -->
+                        <div class="instructions-panel collapsed">
+                          <div class="instructions-header" onclick="toggleInstructions()">
+                            <h3>Instructions</h3>
+                            <span class="arrow-icon">&#9660;</span>
+                          </div>
+                          <div class="instructions-content collapsed" id="instructions-content">
+                            <ul class="instructions-list">
+                                <li>Step 1: Select the language for chunking.</li>
+                                <li>Step 2: Choose the size of the training corpus.</li>
+                                <li>Step 3: Select the algorithm for training.</li>
+                                <li>Step 4: Select the feature for training.</li>
+                                <li>Step 5: Click 'Check Accuracy' to view results.</li>
+                                <li>Step 6: Try another configuration if needed.</li>
+                            </ul>
+                          </div>
+                        </div>
                         <div class="simulation-flex-container simulation-2col-grid">
                             <div class="sim-col1">
                                 <div class="simulation-step" id="step-language"></div>
@@ -46,6 +62,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
