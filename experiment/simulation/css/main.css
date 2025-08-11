@@ -726,3 +726,35 @@ body {
 .instructions-list li {
   margin-bottom: 0.3em;
 }
+
+/* Center the main content container */
+.container-fluid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* Center the col-md-10 div specifically */
+.col-md-10 {
+  margin: 0 auto !important;
+  float: none !important;
+  max-width: 1200px;
+}
+
+/* Ensure proper spacing on smaller screens */
+@media (max-width: 768px) {
+  .col-md-10 {
+    margin: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* For tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .col-md-10 {
+    margin: 0 auto !important;
+    width: 90% !important;
+  }
+}
