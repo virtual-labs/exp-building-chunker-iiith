@@ -1,11 +1,42 @@
-**STEP1**: Select the language.
+### Step-by-Step Procedure for Building a Chunker
 
-**OUTPUT**: Drop down to select size of corpus, algorithm and features will appear.
+**Step 1: Select Language**
 
-**STEP2**: Select corpus size.
+- Choose the target language (English or Hindi) for chunking analysis.
 
-**STEP3**: Select algorithm "CRF" or "HMM".
+**Step 2: Choose Training Corpus Size**
 
-**STEP4**: Select feature "only lexicon", "only POS", "lexicon and POS".
+- Select the size of the training data. Larger corpora may improve accuracy but take longer to train.
 
-**OUTPUT**: Corresponding accuracy wil be shown.
+**Step 3: Select Algorithm**
+
+- Pick the machine learning model for chunking: Hidden Markov Model (HMM) or Conditional Random Field (CRF).
+
+**Step 4: Choose Feature Set**
+
+- Decide which features to use for training:
+  - Lexicon only
+  - POS tags only
+  - Lexicon + POS tags (recommended for best results)
+
+**Step 5: Train and Evaluate**
+
+- Click "Check Accuracy" to train the chunker and view its accuracy for your chosen configuration.
+- Review example sentences with predicted chunk boundaries.
+
+**Step 6: Experiment and Compare**
+
+- Try different combinations of features, corpus sizes, and algorithms.
+- Use "Reset / Try Another Configuration" to start over and explore more settings.
+
+**Tips:**
+
+- Use larger corpora and richer feature sets for higher accuracy.
+- Compare HMM and CRF results to understand model differences.
+- Analyze error patterns in the output to improve your chunker.
+
+**OUTPUT:**
+
+- The accuracy of the chunker for the selected configuration is shown.
+- Example sentences with their predicted chunks are displayed for better understanding.
+- You can use the "Reset / Try Another Configuration" button to start over and explore different settings.
