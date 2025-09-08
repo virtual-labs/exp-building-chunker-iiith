@@ -1,0 +1,3 @@
+**To understand and practice building a chunker for Natural Language Processing through interactive exploration of feature selection and training corpus size.**
+
+This experiment aims to help students develop proficiency in constructing chunkers using machine learning models (HMM, CRF), analyzing how different features and corpus sizes affect chunking accuracy, and visualizing the impact of these choices through hands-on simulation. Learners will work with sentences from English and Hindi, experiment with model configurations, and interpret results to optimize chunker performance for real-world NLP tasks.
