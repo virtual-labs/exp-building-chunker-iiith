@@ -3,8 +3,8 @@
 // Utility to fetch and parse the data file
 function fetchDataFile(language) {
   const fileMap = {
-    eng: "analyse-size-chunk/accuracies_english",
-    hin: "analyse-size-chunk/accuracies_hindi",
+    eng: "analyse-size-chunk/accuracies_english.txt",
+    hin: "analyse-size-chunk/accuracies_hindi.txt",
   };
   return fetch(fileMap[language])
     .then((response) => response.text())
