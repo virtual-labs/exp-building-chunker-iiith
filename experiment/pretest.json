@@ -19,7 +19,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Which of the following is an example of a chunk in the sentence: 'The quick brown fox jumps'?",
+      "question": "Which of the following is the noun phrase (NP) chunk in the sentence: 'The quick brown fox jumps'?",
       "answers": {
         "a": "The quick brown fox",
         "b": "jumps",
@@ -28,7 +28,7 @@
       },
       "explanations": {
         "a": "Correct! 'The quick brown fox' is a noun phrase chunk.",
-        "b": "Correct! 'jumps' is a verb phrase chunk.",
+        "b": "Incorrect. 'jumps' is a verb phrase chunk, not a noun phrase chunk.",
         "c": "Incorrect. 'The' alone is not a chunk, but part of a larger chunk.",
         "d": "Incorrect. 'quick brown' is not a complete chunk by itself."
       },
